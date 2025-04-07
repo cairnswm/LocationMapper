@@ -124,7 +124,7 @@ function MapView() {
             }
             return null
           })}
-          {addingRegion && (regionMode === 'mark' || regionMode === 'edit') && newRegionCoords.length > 0 && (
+          {addingRegion && (regionMode === 'mark' || regionMode === 'edit') && newRegionCoords?.length > 0 && (
             <>
               <Polygon positions={newRegionCoords} pathOptions={{ color: '#3388ff', dashArray: '5, 5' }} />
               {newRegionCoords.map((pos, idx) => (

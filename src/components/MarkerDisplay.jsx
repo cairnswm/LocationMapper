@@ -4,7 +4,14 @@ import { MapPin, MapRegion } from "./MapFeatures";
 import { getMarkIcon } from "../utils/icons";
 import { useFeaturesContext } from "../context/FeaturesContext";
 
-function MarkerDisplay({ features, editingRegionId, addingRegion, regionMode, newRegionCoords }) {
+function MarkerDisplay({
+  features,
+  editingRegionId,
+  addingRegion,
+  regionMode,
+  newRegionCoords,
+  onContextMenu
+}) {
   const { updateMarkPosition, removeMarkPoint, openModal, handlePinDragEnd } =
     useFeaturesContext();
 
@@ -18,6 +25,7 @@ function MarkerDisplay({ features, editingRegionId, addingRegion, regionMode, ne
               feature={feature}
               onPinClick={openModal}
               onPinDragEnd={handlePinDragEnd}
+              onContextMenu={onContextMenu}
             />
           );
         } else if (feature.type === "region") {
@@ -27,19 +35,37 @@ function MarkerDisplay({ features, editingRegionId, addingRegion, regionMode, ne
                 key={feature.id}
                 feature={feature}
                 onRegionClick={openModal}
+                onContextMenu={onContextMenu}
               />
             );
           }
         }
         return null;
       })}
-      {(addingRegion &&
-        (regionMode === "mark" || regionMode === "edit" || regionMode==="center") &&
-        newRegionCoords?.length > 0) ? (
+      {addingRegion &&
+      (regionMode === "mark" ||
+        regionMode === "edit" ||
+        regionMode === "center") &&
+      newRegionCoords?.length > 0 ? (
         <>
           <Polygon
             positions={newRegionCoords}
             pathOptions={{ color: "#3388ff", dashArray: "5, 5" }}
+            eventHandlers={{
+              click: () => onRegionClick(feature),
+              contextmenu: (e) => {
+                e.originalEvent.preventDefault();
+                console.log("Right click event on Editing Region");
+                if (onContextMenu) {
+                  const { clientX, clientY } = e.originalEvent;
+                  onContextMenu({
+                    x: clientX,
+                    y: clientY,
+                    latlng: e.latlng,
+                  });
+                }
+              },
+            }}
           />
           {newRegionCoords.map((pos, idx) => (
             <Marker

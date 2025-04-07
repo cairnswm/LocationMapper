@@ -20,18 +20,6 @@ export function MapClickHandler({ onMapClick, regionMode, onContextMenu }) {
         onMapClick(e)
       }
     },
-    contextmenu(e) {
-      // Prevent default context menu
-      e.originalEvent.preventDefault()
-      if (onContextMenu) {
-        const { clientX, clientY } = e.originalEvent
-        onContextMenu({ 
-          x: clientX, 
-          y: clientY, 
-          latlng: e.latlng // Use the original event's latlng
-        })
-      }
-    }
   })
   return null
 }

@@ -37,8 +37,8 @@ function MapView() {
     startRegionAtPoint,
   } = useFeaturesContext();
 
-  const handleContextMenu = ({ x, y, latlng }) => {
-    setContextMenu({ x, y, latlng });
+  const handleContextMenu = ({ x, y, latlng, feature }) => {
+    setContextMenu({ x, y, latlng, feature });
   };
 
   const closeContextMenu = () => {
@@ -70,6 +70,7 @@ function MapView() {
             addingRegion={addingRegion}
             regionMode={regionMode}
             newRegionCoords={newRegionCoords}
+            onContextMenu={handleContextMenu}
           />
         </MapContainer>
       </div>
@@ -100,6 +101,11 @@ function MapView() {
             addingRegion && regionMode === "mark" && newRegionCoords.length >= 3
           }
           onClose={closeContextMenu}
+          onEditRegion={(feature) => {
+            updateFeature={feature}
+            closeContextMenu();
+          }}
+          feature={contextMenu.feature} 
         />
       )}
     </div>

@@ -71,12 +71,13 @@ export function FeaturesProvider({ children }) {
   };
 
   const addRegionPointCenter = (mapCenter) => {
-    if (!addingRegion) {
+    if (addingRegion) {
+      setNewRegionCoords([...newRegionCoords, mapCenter]);
+    } else {
+      console.log("Adding region point at center:", mapCenter);
       setAddingRegion(true);
       setRegionMode("center");
-      setNewRegionCoords([]);
-    } else if (regionMode === "center") {
-      setNewRegionCoords([...newRegionCoords, mapCenter]);
+      setNewRegionCoords([mapCenter]);
     }
   };
 
@@ -164,6 +165,7 @@ export function FeaturesProvider({ children }) {
   };
 
   const startRegionAtPoint = (coords) => {
+    console.log("Starting region at point:", coords);
     setAddingRegion(true);
     setRegionMode("mark");
     setNewRegionCoords([coords]);

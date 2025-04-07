@@ -38,7 +38,7 @@ function HeaderButtons({ mapCenter }) {
       >
         Mark Region (Click)
       </button>{" "}
-      {addingRegion && regionMode === "mark" && (
+      {addingRegion && (regionMode === "mark" || regionMode === "center") && (
         <button
           className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600"
           onClick={finishRegion}

@@ -34,7 +34,7 @@ function MarkerDisplay({ features, editingRegionId, addingRegion, regionMode, ne
         return null;
       })}
       {(addingRegion &&
-        (regionMode === "mark" || regionMode === "edit") &&
+        (regionMode === "mark" || regionMode === "edit" || regionMode==="center") &&
         newRegionCoords?.length > 0) ? (
         <>
           <Polygon

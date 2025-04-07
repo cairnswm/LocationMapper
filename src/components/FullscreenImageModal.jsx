@@ -21,7 +21,7 @@ function FullscreenImageModal({ image, onClose }) {
         />
         <button
           type="button"
-          className="absolute top-2 right-2 bg-red-500 text-white text-lg rounded-full w-8 h-8 flex items-center justify-center"
+          className="absolute top-2 right-2 bg-white text-white text-lg rounded-full w-8 h-8 flex items-center justify-center"
           onClick={onClose}
           style={{
             position: 'absolute',

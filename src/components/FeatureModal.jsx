@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import RichTextEditor from './RichTextEditor'
 import { useFeaturesContext } from "../context/FeaturesContext";
 import FullscreenImageModal from './FullscreenImageModal';
+import { FaTrash } from 'react-icons/fa';
 
 function FeatureModal({ show, onHide, feature, updateFeature }) {
   const { handleEditPoints } = useFeaturesContext();
@@ -66,7 +67,7 @@ function FeatureModal({ show, onHide, feature, updateFeature }) {
         className={`fixed inset-0 z-[1000] flex items-center justify-center ${
           show ? 'block' : 'hidden'
         }`}
-        style={{zIndex: 1000}}
+        style={{zIndex: 1000, maxWidth: "90vw", marginLeft: "auto", marginRight: "auto"}}
       >
         <div
           className="fixed inset-0 bg-black bg-opacity-50"
@@ -134,7 +135,7 @@ function FeatureModal({ show, onHide, feature, updateFeature }) {
                         className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
                         onClick={() => removeImage(index)}
                       >
-                        ×
+                        <FaTrash />
                       </button>
                     </div>
                   ))}

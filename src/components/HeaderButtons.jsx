@@ -1,15 +1,17 @@
 import React from "react";
+import { useFeaturesContext } from "../context/FeaturesContext";
 
-function HeaderButtons({
-  mapCenter,
-  addingRegion,
-  regionMode,
-  addPin,
-  addRegionPointCenter,
-  startMarkRegion,
-  finishRegion,
-  finishEditingRegion,
-}) {
+function HeaderButtons({ mapCenter }) {
+  const {
+    addingRegion,
+    regionMode,
+    addPin,
+    addRegionPointCenter,
+    startMarkRegion,
+    finishRegion,
+    finishEditingRegion,
+  } = useFeaturesContext();
+
   return (
     <div className="p-2">
       <button

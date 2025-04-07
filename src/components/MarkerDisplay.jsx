@@ -2,18 +2,12 @@ import React from "react";
 import { Marker, Polygon } from "react-leaflet";
 import { MapPin, MapRegion } from "./MapFeatures";
 import { getMarkIcon } from "../utils/icons";
+import { useFeaturesContext } from "../context/FeaturesContext";
 
-function MarkerDisplay({
-  features,
-  editingRegionId,
-  addingRegion,
-  regionMode,
-  newRegionCoords,
-  updateMarkPosition,
-  removeMarkPoint,
-  openModal,
-  handlePinDragEnd,
-}) {
+function MarkerDisplay({ features, editingRegionId, addingRegion, regionMode, newRegionCoords }) {
+  const { updateMarkPosition, removeMarkPoint, openModal, handlePinDragEnd } =
+    useFeaturesContext();
+
   return (
     <>
       {features.map((feature) => {

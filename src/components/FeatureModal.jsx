@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import RichTextEditor from './RichTextEditor'
+import { useFeaturesContext } from "../context/FeaturesContext";
 
-function FeatureModal({ show, onHide, feature, updateFeature, onEditPoints }) {
+function FeatureModal({ show, onHide, feature, updateFeature }) {
+  const { handleEditPoints } = useFeaturesContext();
   const [name, setName] = useState(feature?.name || '')
   const [text, setText] = useState(feature?.text || '')
   const [color, setColor] = useState(feature?.color || '#3388ff')
@@ -130,10 +132,10 @@ function FeatureModal({ show, onHide, feature, updateFeature, onEditPoints }) {
               />
             </div>
 
-            {feature.type === 'region' && onEditPoints && (
+            {feature.type === 'region' && (
               <button
                 type="button"
-                onClick={() => onEditPoints(feature)}
+                onClick={() => handleEditPoints(feature)}
                 className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded"
               >
                 Edit Region Points

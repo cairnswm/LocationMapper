@@ -124,6 +124,7 @@ export function FeaturesProvider({ children }) {
   };
 
   const handleEditPoints = (region) => {
+    console.log("Editing region:", region);
     setAddingRegion(true);
     setRegionMode("edit");
     setNewRegionCoords(region.coords);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Polygon } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import L from "leaflet";
 import FeatureModal from "./FeatureModal";
 import { MapUpdater, MapClickHandler } from "./MapEvents";
@@ -31,16 +31,8 @@ function MapView() {
     editingRegionId,
     addPin,
     updateFeature,
-    addRegionPointCenter,
-    startMarkRegion,
     handleMapClick,
-    updateMarkPosition,
-    removeMarkPoint,
     finishRegion,
-    handleEditPoints,
-    finishEditingRegion,
-    handlePinDragEnd,
-    openModal,
     closeModal,
     startRegionAtPoint,
   } = useFeaturesContext();
@@ -55,16 +47,7 @@ function MapView() {
 
   return (
     <div className="h-full flex flex-col">
-      <HeaderButtons
-        mapCenter={mapCenter}
-        addingRegion={addingRegion}
-        regionMode={regionMode}
-        addPin={addPin}
-        addRegionPointCenter={addRegionPointCenter}
-        startMarkRegion={startMarkRegion}
-        finishRegion={finishRegion}
-        finishEditingRegion={finishEditingRegion}
-      />
+      <HeaderButtons mapCenter={mapCenter} />
       <div className="flex-grow" style={{ height: "calc(100% - 56px)" }}>
         <MapContainer
           center={mapCenter}
@@ -87,10 +70,6 @@ function MapView() {
             addingRegion={addingRegion}
             regionMode={regionMode}
             newRegionCoords={newRegionCoords}
-            updateMarkPosition={updateMarkPosition}
-            removeMarkPoint={removeMarkPoint}
-            openModal={openModal}
-            handlePinDragEnd={handlePinDragEnd}
           />
         </MapContainer>
       </div>
@@ -100,9 +79,6 @@ function MapView() {
           onHide={closeModal}
           feature={activeFeature}
           updateFeature={updateFeature}
-          onEditPoints={
-            activeFeature.type === "region" ? handleEditPoints : undefined
-          }
         />
       )}
       {contextMenu && (

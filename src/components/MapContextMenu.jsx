@@ -14,6 +14,8 @@ export function MapContextMenu({
     useFeaturesContext();
   if (!position) return null;
 
+  console.log("Context Menu event", feature);
+
   const menuStyle = {
     position: "fixed",
     top: position.y,
@@ -47,7 +49,7 @@ export function MapContextMenu({
   return (
     <>
       <div style={menuStyle}>
-        {feature && (
+        {feature && feature.name && (
           <div style={{ padding: "8px 16px", fontSize: "14px" }}>
             <strong>{feature.name || "Unnamed Feature"}</strong>
             <p>{feature.description}</p>

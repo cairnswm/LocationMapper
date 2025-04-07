@@ -10,7 +10,8 @@ function MarkerDisplay({
   addingRegion,
   regionMode,
   newRegionCoords,
-  onContextMenu
+  onContextMenu,
+  featureContextHandler,
 }) {
   const { updateMarkPosition, removeMarkPoint, openModal, handlePinDragEnd } =
     useFeaturesContext();
@@ -26,6 +27,7 @@ function MarkerDisplay({
               onPinClick={openModal}
               onPinDragEnd={handlePinDragEnd}
               onContextMenu={onContextMenu}
+              featureContextHandler={featureContextHandler}
             />
           );
         } else if (feature.type === "region") {
@@ -36,6 +38,7 @@ function MarkerDisplay({
                 feature={feature}
                 onRegionClick={openModal}
                 onContextMenu={onContextMenu}
+                featureContextHandler={featureContextHandler}
               />
             );
           }
@@ -53,18 +56,7 @@ function MarkerDisplay({
             pathOptions={{ color: "#3388ff", dashArray: "5, 5" }}
             eventHandlers={{
               click: () => onRegionClick(feature),
-              contextmenu: (e) => {
-                e.originalEvent.preventDefault();
-                console.log("Right click event on Editing Region");
-                if (onContextMenu) {
-                  const { clientX, clientY } = e.originalEvent;
-                  onContextMenu({
-                    x: clientX,
-                    y: clientY,
-                    latlng: e.latlng,
-                  });
-                }
-              },
+              contextmenu: (e) => featureContextHandler(e, null),
             }}
           />
           {newRegionCoords.map((pos, idx) => (

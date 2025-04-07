@@ -7,6 +7,7 @@ import { useFeaturesContext } from "../context/FeaturesContext";
 import { MapContextMenu } from "./MapContextMenu";
 import MarkerDisplay from "./MarkerDisplay";
 import HeaderButtons from "./HeaderButtons";
+import { useContextMenuHandler } from "./useContextMenuHandler";
 
 // Default marker icon fix for leaflet
 import "leaflet/dist/leaflet.css";
@@ -37,13 +38,19 @@ function MapView() {
     startRegionAtPoint,
   } = useFeaturesContext();
 
+
   const handleContextMenu = ({ x, y, latlng, feature }) => {
-    setContextMenu({ x, y, latlng, feature });
+    console.log("Open context Menu", contextMenu)
+    if (!contextMenu) {
+      setContextMenu({ x, y, latlng, feature });
+    }
   };
 
   const closeContextMenu = () => {
     setContextMenu(null);
   };
+  
+  const { mapContextHandler, featureContextHandler } = useContextMenuHandler(handleContextMenu);
 
   return (
     <div className="h-full flex flex-col">
@@ -63,6 +70,7 @@ function MapView() {
             onMapClick={handleMapClick}
             regionMode={regionMode}
             onContextMenu={handleContextMenu}
+            mapContextHandler={mapContextHandler}
           />
           <MarkerDisplay
             features={features}
@@ -71,6 +79,7 @@ function MapView() {
             regionMode={regionMode}
             newRegionCoords={newRegionCoords}
             onContextMenu={handleContextMenu}
+            featureContextHandler={featureContextHandler}
           />
         </MapContainer>
       </div>
@@ -90,7 +99,10 @@ function MapView() {
             closeContextMenu();
           }}
           onAddRegion={() => {
-            startRegionAtPoint([contextMenu.latlng.lat, contextMenu.latlng.lng]);
+            startRegionAtPoint([
+              contextMenu.latlng.lat,
+              contextMenu.latlng.lng,
+            ]);
             closeContextMenu();
           }}
           onFinishRegion={() => {
@@ -102,10 +114,10 @@ function MapView() {
           }
           onClose={closeContextMenu}
           onEditRegion={(feature) => {
-            updateFeature={feature}
+            updateFeature = { feature };
             closeContextMenu();
           }}
-          feature={contextMenu.feature} 
+          feature={contextMenu.feature}
         />
       )}
     </div>

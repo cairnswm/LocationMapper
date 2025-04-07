@@ -75,7 +75,7 @@ yarn start
 
 - React
 - Leaflet & react-leaflet for mapping
-- Bootstrap for UI components
+- Tailwinf for styling
 - TipTap for rich text editing
 - OpenStreetMap Nominatim API for geocoding
 

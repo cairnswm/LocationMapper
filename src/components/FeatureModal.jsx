@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Button, Form } from 'react-bootstrap'
 import RichTextEditor from './RichTextEditor'
 
 function FeatureModal({ show, onHide, feature, updateFeature, onEditPoints }) {

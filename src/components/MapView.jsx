@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Polygon } from "react-leaflet";
+import { MapContainer, TileLayer, Polygon } from "react-leaflet";
 import L from "leaflet";
 import FeatureModal from "./FeatureModal";
-import { MapPin, MapRegion } from "./MapFeatures";
 import { MapUpdater, MapClickHandler } from "./MapEvents";
-import { getMarkIcon } from "../utils/icons";
 import { useFeaturesContext } from "../context/FeaturesContext";
 import { MapContextMenu } from "./MapContextMenu";
+import MarkerDisplay from "./MarkerDisplay";
+import HeaderButtons from "./HeaderButtons";
 
 // Default marker icon fix for leaflet
 import "leaflet/dist/leaflet.css";
@@ -28,7 +28,7 @@ function MapView() {
     addingRegion,
     regionMode,
     newRegionCoords,
-    editingRegionId, // Include editingRegionId
+    editingRegionId,
     addPin,
     updateFeature,
     addRegionPointCenter,
@@ -45,27 +45,8 @@ function MapView() {
     startRegionAtPoint,
   } = useFeaturesContext();
 
-  const handleAddPin = () => {
-    addPin(mapCenter);
-  };
-
   const handleContextMenu = ({ x, y, latlng }) => {
     setContextMenu({ x, y, latlng });
-  };
-
-  const handleAddPinFromContext = () => {
-    addPin([contextMenu.latlng.lat, contextMenu.latlng.lng]);
-    setContextMenu(null);
-  };
-
-  const handleAddRegionFromContext = () => {
-    startRegionAtPoint([contextMenu.latlng.lat, contextMenu.latlng.lng]);
-    setContextMenu(null);
-  };
-
-  const handleFinishRegionFromContext = () => {
-    finishRegion();
-    setContextMenu(null);
   };
 
   const closeContextMenu = () => {
@@ -74,48 +55,16 @@ function MapView() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-2">
-        <button
-          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600"
-          onClick={handleAddPin}
-        >
-          Add Pin
-        </button>{" "}
-        <button
-          className={`${
-            addingRegion && regionMode === "center"
-              ? "bg-secondary-500"
-              : "bg-gray-500"
-          } text-white font-semibold py-2 px-4 rounded hover:bg-gray-600`}
-          onClick={() => addRegionPointCenter(mapCenter)}
-        >
-          {addingRegion && regionMode === "center"
-            ? "Add Region Point (Center)"
-            : "Add Region (Center)"}
-        </button>{" "}
-        <button
-          className="bg-gray-500 text-white font-semibold py-2 px-4 rounded hover:bg-gray-600"
-          onClick={startMarkRegion}
-        >
-          Mark Region (Click)
-        </button>{" "}
-        {addingRegion && regionMode === "mark" && (
-          <button
-            className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600"
-            onClick={finishRegion}
-          >
-            Done
-          </button>
-        )}
-        {addingRegion && regionMode === "edit" && (
-          <button
-            className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600"
-            onClick={finishEditingRegion}
-          >
-            Done Editing
-          </button>
-        )}
-      </div>
+      <HeaderButtons
+        mapCenter={mapCenter}
+        addingRegion={addingRegion}
+        regionMode={regionMode}
+        addPin={addPin}
+        addRegionPointCenter={addRegionPointCenter}
+        startMarkRegion={startMarkRegion}
+        finishRegion={finishRegion}
+        finishEditingRegion={finishEditingRegion}
+      />
       <div className="flex-grow" style={{ height: "calc(100% - 56px)" }}>
         <MapContainer
           center={mapCenter}
@@ -132,59 +81,17 @@ function MapView() {
             regionMode={regionMode}
             onContextMenu={handleContextMenu}
           />
-          {features.map((feature) => {
-            if (feature.type === "pin") {
-              return (
-                <MapPin
-                  key={feature.id}
-                  feature={feature}
-                  onPinClick={openModal}
-                  onPinDragEnd={handlePinDragEnd}
-                />
-              );
-            } else if (feature.type === "region") {
-              if (feature.id !== editingRegionId) {
-                return (
-                  <MapRegion
-                    key={feature.id}
-                    feature={feature}
-                    onRegionClick={openModal}
-                  />
-                );
-              }
-            }
-            return null;
-          })}
-          {(addingRegion &&
-            (regionMode === "mark" || regionMode === "edit") &&
-            newRegionCoords?.length > 0) ? (
-            <>
-              <Polygon
-                positions={newRegionCoords}
-                pathOptions={{ color: "#3388ff", dashArray: "5, 5" }}
-              />
-              {newRegionCoords.map((pos, idx) => (
-                <Marker
-                  key={idx}
-                  position={pos}
-                  icon={getMarkIcon()}
-                  draggable
-                  eventHandlers={{
-                    dragend: (e) => updateMarkPosition(idx, e),
-                    contextmenu: (e) => removeMarkPoint(idx, e),
-                  }}
-                />
-              ))}
-            </>
-          ) : null}
-          {addingRegion &&
-            regionMode === "center" &&
-            newRegionCoords.length > 0 && (
-              <Polygon
-                positions={newRegionCoords}
-                pathOptions={{ color: "#3388ff", dashArray: "5, 5" }}
-              />
-            )}
+          <MarkerDisplay
+            features={features}
+            editingRegionId={editingRegionId}
+            addingRegion={addingRegion}
+            regionMode={regionMode}
+            newRegionCoords={newRegionCoords}
+            updateMarkPosition={updateMarkPosition}
+            removeMarkPoint={removeMarkPoint}
+            openModal={openModal}
+            handlePinDragEnd={handlePinDragEnd}
+          />
         </MapContainer>
       </div>
       {activeFeature && (
@@ -201,9 +108,18 @@ function MapView() {
       {contextMenu && (
         <MapContextMenu
           position={{ x: contextMenu.x, y: contextMenu.y }}
-          onAddPin={handleAddPinFromContext}
-          onAddRegion={handleAddRegionFromContext}
-          onFinishRegion={handleFinishRegionFromContext}
+          onAddPin={() => {
+            addPin([contextMenu.latlng.lat, contextMenu.latlng.lng]);
+            closeContextMenu();
+          }}
+          onAddRegion={() => {
+            startRegionAtPoint([contextMenu.latlng.lat, contextMenu.latlng.lng]);
+            closeContextMenu();
+          }}
+          onFinishRegion={() => {
+            finishRegion();
+            closeContextMenu();
+          }}
           isEditingRegion={
             addingRegion && regionMode === "mark" && newRegionCoords.length >= 3
           }

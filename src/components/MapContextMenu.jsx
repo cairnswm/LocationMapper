@@ -59,7 +59,7 @@ export function MapContextMenu({ position, onAddPin, onAddRegion, onFinishRegion
           <button
             style={{
               ...menuItemStyle,
-              color: '#198754', // Bootstrap success color
+              color: '#198754',
               fontWeight: 'bold'
             }}
             onMouseEnter={handleItemHover}

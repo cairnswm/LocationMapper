@@ -4,7 +4,6 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import TextStyle from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
-import { Button, ButtonGroup } from 'react-bootstrap'
 import { FaHeading, FaBold, FaItalic, FaUnderline, FaListUl, FaListOl, FaAdjust } from 'react-icons/fa'
 
 function RichTextEditor({ value, onChange }) {
@@ -60,47 +59,82 @@ function RichTextEditor({ value, onChange }) {
 
   return (
     <div>
-      <div className="d-flex flex-wrap gap-2 mb-2 align-items-end">
-        <ButtonGroup>
-          <Button variant="outline-secondary" onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} title="H1">
-            <FaHeading />
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup className="me-2">
-          <Button variant="outline-secondary" onClick={() => editor.chain().focus().toggleBold().run()} title="Bold">
-            <FaBold />
-          </Button>
-          <Button variant="outline-secondary" onClick={() => editor.chain().focus().toggleItalic().run()} title="Italic">
-            <FaItalic />
-          </Button>
-          <Button variant="outline-secondary" onClick={() => editor.chain().focus().toggleUnderline().run()} title="Underline">
-            <FaUnderline />
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup className="me-2">
-          <Button variant="outline-secondary" onClick={openNativeColorPicker} title="Text Color">
-            <FaAdjust />
-          </Button>
-          {/* Hidden input to invoke native color picker
-              Note: The native color picker popup position is controlled by the browser and cannot be programmatically repositioned. */}
-          <input
-            type="color"
-            ref={colorInputRef}
-            value={localColor}
-            onChange={handleColorChange}
-            style={{ display: 'none' }}
-          />
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button variant="outline-secondary" onClick={() => editor.chain().focus().toggleBulletList().run()} title="Bullet List">
-            <FaListUl />
-          </Button>
-          <Button variant="outline-secondary" onClick={() => editor.chain().focus().toggleOrderedList().run()} title="Ordered List">
-            <FaListOl />
-          </Button>
-        </ButtonGroup>
+      <div className="flex flex-wrap gap-2 mb-2 items-end">
+        <div className="flex">
+          <div className="inline-flex border border-gray-300 rounded-md overflow-hidden">
+            <button
+              className="px-3 py-2 hover:bg-gray-100 border-r border-gray-300"
+              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+              title="H1"
+            >
+              <FaHeading />
+            </button>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <div className="inline-flex border border-gray-300 rounded-md overflow-hidden">
+            <button
+              className="px-3 py-2 hover:bg-gray-100 border-r border-gray-300"
+              onClick={() => editor.chain().focus().toggleBold().run()}
+              title="Bold"
+            >
+              <FaBold />
+            </button>
+            <button
+              className="px-3 py-2 hover:bg-gray-100 border-r border-gray-300"
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+              title="Italic"
+            >
+              <FaItalic />
+            </button>
+            <button
+              className="px-3 py-2 hover:bg-gray-100"
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+              title="Underline"
+            >
+              <FaUnderline />
+            </button>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <div className="inline-flex border border-gray-300 rounded-md overflow-hidden">
+            <button
+              className="px-3 py-2 hover:bg-gray-100"
+              onClick={openNativeColorPicker}
+              title="Text Color"
+            >
+              <FaAdjust />
+            </button>
+            {/* Hidden input to invoke native color picker */}
+            <input
+              type="color"
+              ref={colorInputRef}
+              value={localColor}
+              onChange={handleColorChange}
+              className="hidden"
+            />
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <div className="inline-flex border border-gray-300 rounded-md overflow-hidden">
+            <button
+              className="px-3 py-2 hover:bg-gray-100 border-r border-gray-300"
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              title="Bullet List"
+            >
+              <FaListUl />
+            </button>
+            <button
+              className="px-3 py-2 hover:bg-gray-100"
+              onClick={() => editor.chain().focus().toggleOrderedList().run()}
+              title="Ordered List"
+            >
+              <FaListOl />
+            </button>
+          </div>
+        </div>
       </div>
-      <div style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', padding: '8px', minHeight: '200px' }}>
+      <div className="border border-gray-300 rounded-md p-2 min-h-[200px]">
         <EditorContent editor={editor} />
       </div>
     </div>

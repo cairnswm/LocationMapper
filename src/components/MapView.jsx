@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, Polygon } from "react-leaflet";
-import { Button, Container, Row, Col } from "react-bootstrap";
 import L from "leaflet";
 import FeatureModal from "./FeatureModal";
 import { MapPin, MapRegion } from "./MapFeatures";
@@ -74,36 +73,50 @@ function MapView() {
   };
 
   return (
-    <Container fluid style={{ height: "100%" }}>
-      <Row className="p-2">
-        <Col>
-          <Button variant="primary" onClick={handleAddPin}>
-            Add Pin
-          </Button>{" "}
-          <Button
-            variant="secondary"
-            onClick={() => addRegionPointCenter(mapCenter)}
+    <div className="h-full flex flex-col">
+      <div className="p-2">
+        <button
+          className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600"
+          onClick={handleAddPin}
+        >
+          Add Pin
+        </button>{" "}
+        <button
+          className={`${
+            addingRegion && regionMode === "center"
+              ? "bg-secondary-500"
+              : "bg-gray-500"
+          } text-white font-semibold py-2 px-4 rounded hover:bg-gray-600`}
+          onClick={() => addRegionPointCenter(mapCenter)}
+        >
+          {addingRegion && regionMode === "center"
+            ? "Add Region Point (Center)"
+            : "Add Region (Center)"}
+        </button>{" "}
+        <button
+          className="bg-gray-500 text-white font-semibold py-2 px-4 rounded hover:bg-gray-600"
+          onClick={startMarkRegion}
+        >
+          Mark Region (Click)
+        </button>{" "}
+        {addingRegion && regionMode === "mark" && (
+          <button
+            className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600"
+            onClick={finishRegion}
           >
-            {addingRegion && regionMode === "center"
-              ? "Add Region Point (Center)"
-              : "Add Region (Center)"}
-          </Button>{" "}
-          <Button variant="secondary" onClick={startMarkRegion}>
-            Mark Region (Click)
-          </Button>{" "}
-          {addingRegion && regionMode === "mark" && (
-            <Button variant="success" onClick={finishRegion}>
-              Done
-            </Button>
-          )}
-          {addingRegion && regionMode === "edit" && (
-            <Button variant="success" onClick={finishEditingRegion}>
-              Done Editing
-            </Button>
-          )}
-        </Col>
-      </Row>
-      <Row style={{ height: "calc(100% - 56px)" }}>
+            Done
+          </button>
+        )}
+        {addingRegion && regionMode === "edit" && (
+          <button
+            className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-600"
+            onClick={finishEditingRegion}
+          >
+            Done Editing
+          </button>
+        )}
+      </div>
+      <div className="flex-grow" style={{ height: "calc(100% - 56px)" }}>
         <MapContainer
           center={mapCenter}
           zoom={13}
@@ -173,7 +186,7 @@ function MapView() {
               />
             )}
         </MapContainer>
-      </Row>
+      </div>
       {activeFeature && (
         <FeatureModal
           show={showModal}
@@ -197,7 +210,7 @@ function MapView() {
           onClose={closeContextMenu}
         />
       )}
-    </Container>
+    </div>
   );
 }
 

@@ -12,7 +12,6 @@ export async function getLocationName(lat, lng) {
     
     // Try to get the most specific name possible
     const address = data.address
-    console.log("address", address)
     return address.leisure || 
            address.attraction || 
            address.natural || 

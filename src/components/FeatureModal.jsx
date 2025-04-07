@@ -107,7 +107,7 @@ function FeatureModal({ show, onHide, feature, updateFeature, onEditPoints }) {
           </Form.Group>
 
           {feature.type === 'region' && onEditPoints && (
-            <Button variant="secondary" onClick={onEditPoints} className="mb-3">
+            <Button variant="secondary" onClick={() => onEditPoints(feature)} className="mb-3">
               Edit Region Points
             </Button>
           )}
